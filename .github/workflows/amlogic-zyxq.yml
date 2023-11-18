@@ -1,5 +1,5 @@
 #CI项目名
-name: amlogic-N1
+name: amlogic-zyxq
 
 on:
   #自动编译：每天早上4点
@@ -18,11 +18,11 @@ jobs:
     uses: ./.github/workflows/OWRT-CORE-amlogic.yml
     with:
       #编译平台，X64包含X86,arm
-      OWRT_TARGET: s905d_n1
+      OWRT_TARGET: s912_zyxq
       #默认主题
       OWRT_THEME: argon
       #默认主机名
-      OWRT_NAME: amlogic-N1
+      OWRT_NAME: amlogic-zyxq
       #默认密码，仅作展示，更改无效
       OWRT_PW: password
       #默认地址
@@ -34,6 +34,6 @@ jobs:
       #自定义config
       OWRT_CFG: N1.config      
       #设备类型
-      OWRT_TYPE: 斐讯N1
+      OWRT_TYPE: 章鱼星球
       OWRT_LINUX: 6.1.62
       OWRT_FILES: N1/files
