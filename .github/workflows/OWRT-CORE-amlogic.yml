@@ -207,24 +207,24 @@ jobs:
           SFE_FLOW: 0
           ENABLE_WIFI_K510: 0
 
-      - name: 生成固件标签
+      - name: 上传固件
         uses: rmoyulong/action-gh-release@master
         if: ${{ env.PACKAGED_STATUS == 'success' }} && !cancelled()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-        tag_name: OpenWrt_${{ env.PACKAGED_OUTPUTDATE }}
-        files: ${{ env.PACKAGED_OUTPUTPATH }}/*.img.xz
-        body: |
-          自用N1固件！首次使用建议全新刷写！
-          基本信息
+          tag_name: OpenWrt_${{ env.PACKAGED_OUTPUTDATE }}
+          files: ${{ env.PACKAGED_OUTPUTPATH }}/*.img.xz
+          body: |
+            自用N1固件！首次使用建议全新刷写！
+            =============基本信息============
 
-          源码：${{env.OWRT_SOURCE}}
-          平台：${{env.OWRT_TARGET}}
-          设备：${{env.OWRT_TYPE}}
-          密码：${{env.OWRT_PW}}
-          地址：${{env.OWRT_IP}}
-          内核：${{env.OWRT_LINUX}}
+            源码：${{env.OWRT_SOURCE}}
+            平台：${{env.OWRT_TARGET}}
+            设备：${{env.OWRT_TYPE}}
+            密码：${{env.OWRT_PW}}
+            地址：${{env.OWRT_IP}}
+            内核：${{env.OWRT_LINUX}}
 
       - name: 清理Releases
         uses: rmoyulong/delete-older-releases@master
