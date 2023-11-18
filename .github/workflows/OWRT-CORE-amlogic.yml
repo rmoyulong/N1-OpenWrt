@@ -200,8 +200,8 @@ jobs:
         uses: unifreq/openwrt_packit@master
         env:
           OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*.tar.gz
-          KERNEL_VERSION_NAME: $OWRT_LINUX
-          PACKAGE_SOC: $OWRT_TARGET
+          KERNEL_VERSION_NAME: ${{ env.OWRT_LINUX }}
+          PACKAGE_SOC: ${{ env.OWRT_TARGET }}
           GZIP_IMGS: .xz
           SW_FLOWOFFLOAD: 0
           SFE_FLOW: 0
@@ -215,7 +215,7 @@ jobs:
           with:
           tag_name: OpenWrt_${{ env.PACKAGED_OUTPUTDATE }}
           files: ${{ env.PACKAGED_OUTPUTPATH }}/*.img.xz
-            自用AX6固件！刷机有风险！
+            自用N1固件！刷机有风险！
             有一定几率变砖，刷前需谨慎！
 
             源码：${{env.OWRT_SOURCE}}
