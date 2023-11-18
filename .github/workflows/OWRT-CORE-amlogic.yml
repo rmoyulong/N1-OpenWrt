@@ -212,18 +212,19 @@ jobs:
         if: ${{ env.PACKAGED_STATUS == 'success' }} && !cancelled()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-          tag_name: OpenWrt_${{ env.PACKAGED_OUTPUTDATE }}
-          files: ${{ env.PACKAGED_OUTPUTPATH }}/*.img.xz
-            自用N1固件！刷机有风险！
-            有一定几率变砖，刷前需谨慎！
+        with:
+        tag_name: OpenWrt_${{ env.PACKAGED_OUTPUTDATE }}
+        files: ${{ env.PACKAGED_OUTPUTPATH }}/*.img.xz
+        body: |
+          自用N1固件！首次使用建议全新刷写！
+          基本信息
 
-            源码：${{env.OWRT_SOURCE}}
-            平台：${{env.OWRT_TARGET}}
-            设备：${{env.OWRT_TYPE}}
-            密码：${{env.OWRT_PW}}
-            地址：${{env.OWRT_IP}}
-            内核：${{env.OWRT_LINUX}}
+          源码：${{env.OWRT_SOURCE}}
+          平台：${{env.OWRT_TARGET}}
+          设备：${{env.OWRT_TYPE}}
+          密码：${{env.OWRT_PW}}
+          地址：${{env.OWRT_IP}}
+          内核：${{env.OWRT_LINUX}}
 
       - name: 清理Releases
         uses: rmoyulong/delete-older-releases@master
