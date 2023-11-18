@@ -18,7 +18,7 @@ jobs:
     uses: ./.github/workflows/OWRT-CORE-amlogic.yml
     with:
       #编译平台，X64包含X86,arm
-      OWRT_TARGET: s905d_n1
+      OWRT_TARGET: s905d
       #默认主题
       OWRT_THEME: argon
       #默认主机名
@@ -35,5 +35,5 @@ jobs:
       OWRT_CFG: N1.config      
       #设备类型
       OWRT_TYPE: 斐讯N1
-      OWRT_LINUX: 6.1.62
+      OWRT_LINUX: 6.1.62_5.15.138
       OWRT_FILES: N1/files
