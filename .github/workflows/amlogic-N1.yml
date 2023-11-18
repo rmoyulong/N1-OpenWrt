@@ -1,36 +1,39 @@
-# This is a basic workflow to help you get started with Actions
+#CI项目名
+name: amlogic-N1
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-
-  # Allows you to run this workflow manually from the Actions tab
+  #自动编译：每天早上4点
+  #schedule:
+    #- cron: 0 20 * * *
+  #手动编译
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+#CI权限
+permissions: write-all
+
+#CI任务
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+  owrt_config:
+    #调用公用编译核心OWRT-CORE.yml
+    uses: ./.github/workflows/OWRT-CORE-amlogic.yml
+    with:
+      #编译平台，X64包含X86,arm
+      OWRT_TARGET: s905d
+      #默认主题
+      OWRT_THEME: argon
+      #默认主机名
+      OWRT_NAME: amlogic-N1
+      #默认密码，仅作展示，更改无效
+      OWRT_PW: password
+      #默认地址
+      OWRT_IP: 192.168.1.100
+      #默认源码
+      OWRT_URL: https://github.com/immortalwrt/immortalwrt
+      #源码版本
+      OWRT_BRANCH: master
+      #自定义config
+      OWRT_CFG: N1.config      
+      #设备类型
+      OWRT_TYPE: 红米AX6
+      OWRT_LINUX: 6.1.62
+      OWRT_FILES: N1/files
