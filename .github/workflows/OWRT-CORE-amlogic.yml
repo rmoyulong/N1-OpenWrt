@@ -169,7 +169,7 @@ jobs:
 
       - name: 自定义设置
         run: |
-          cp -rf $GITHUB_WORKSPACE/$OWRT_FILES openwrt/files
+          #cp -rf $GITHUB_WORKSPACE/$OWRT_FILES openwrt/files
           cd openwrt
 
           rm -rf ./tmp* ./.config*
