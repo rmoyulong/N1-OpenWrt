@@ -213,7 +213,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: OpenWrt_${{ env.PACKAGED_OUTPUTDATE }}
+          tag_name: OpenWrt_${{ env.OWRT_TARGET }}_${{ env.PACKAGED_OUTPUTDATE }}
           files: ${{ env.PACKAGED_OUTPUTPATH }}/*.img.xz
           body: |
             自用N1固件！首次使用建议全新刷写！
