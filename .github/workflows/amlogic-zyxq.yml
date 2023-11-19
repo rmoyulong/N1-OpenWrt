@@ -22,7 +22,7 @@ jobs:
       #默认主题
       OWRT_THEME: argon
       #默认主机名
-      OWRT_NAME: amlogic-zyxq
+      OWRT_NAME: S912-XQ2345
       #默认密码，仅作展示，更改无效
       OWRT_PW: password
       #默认地址
@@ -36,4 +36,4 @@ jobs:
       #设备类型
       OWRT_TYPE: 章鱼星球
       OWRT_LINUX: 6.1.62_5.15.138
-      OWRT_FILES: N1/files
+      OWRT_FILES: zyxq/files
