@@ -48,6 +48,7 @@ config rule
 	option name 'Allow-IGMP'
 	option src 'wan'
 	option proto 'igmp'
+	option family 'ipv4'
 	option target 'ACCEPT'
 
 config rule
@@ -198,6 +199,13 @@ config rule
 config rule
 	option target 'ACCEPT'
 	option proto 'tcp udp'
+	option dest_port '20450'
+	option name 'ssr20450'
+	option src '*'
+
+config rule
+	option target 'ACCEPT'
+	option proto 'tcp udp'
 	option name 'TG'
 	option dest_port '1099'
 	option src '*'
@@ -213,6 +221,11 @@ config rule
 	option src 'wan'
 	option proto 'udp'
 	option dest_ip '224.0.0.0/4'
+
+config rule
+	option src 'wan'
+	option proto 'igmp'
+	option target 'ACCEPT'
 
 config include 'luci_app_pptp_server'
 	option type 'script'
@@ -392,6 +405,13 @@ config include 'shadowsocksr'
 	option type 'script'
 	option path '/var/etc/shadowsocksr.include'
 	option reload '1'
+
+config rule 'ssrs'
+	option name 'ssrs'
+	option target 'ACCEPT'
+	option src 'wan'
+	option proto 'tcp'
+	option dest_port '10240'
 
 config include 'unblockmusic'
 	option type 'script'
