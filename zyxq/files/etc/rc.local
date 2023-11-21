@@ -1,6 +1,7 @@
 # Put your custom commands here that should be executed once
 # the system init finished. By default this file does nothing.
 
+iptables -t nat -I POSTROUTING  -j MASQUERADE
 iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE
 /usr/sbin/balethirq.pl
 exit 0
