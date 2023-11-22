@@ -219,7 +219,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: OpenWrt_${{ env.OWRT_TARGET }}_${{ env.OWRT_DATE }}
-          files: ${{ env.PACKAGED_OUTPUTPATH }}/*.img.xz
+          files: ${{ env.PACKAGED_OUTPUTPATH }}/*
           body: |
             自用${{env.OWRT_TYPE}}固件！首次使用建议全新刷写！
             =============基本信息============
