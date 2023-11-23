@@ -39,13 +39,6 @@ config odhcpd 'odhcpd'
 	option leasetrigger '/usr/sbin/odhcpd-update'
 	option loglevel '4'
 
-config srvhost
-	option srv '_vlmcs._tcp'
-	option target 'S912-XQ2345'
-	option port '1688'
-	option class '0'
-	option weight '100'
-
 config domain
 	option ip '192.168.1.1'
 	option comments '斐讯k3-主路由'
@@ -64,4 +57,11 @@ config domain
 config domain
 	option name 'iptv'
 	option ip '192.168.1.1'
+
+config srvhost
+	option srv '_vlmcs._tcp'
+	option target 'S912_XQ2345'
+	option port '1688'
+	option class '0'
+	option weight '100'
 
