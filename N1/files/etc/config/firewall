@@ -3,26 +3,31 @@ config defaults
 	option syn_flood '1'
 	option input 'ACCEPT'
 	option output 'ACCEPT'
+	option forward 'REJECT'
 	option flow_offloading '1'
 	option flow_offloading_hw '0'
-	option forward 'ACCEPT'
-	option fullcone '1'
+	option fullcone '2'
 
 config zone
 	option name 'lan'
+	list network 'lan'
 	option input 'ACCEPT'
 	option output 'ACCEPT'
 	option forward 'ACCEPT'
-	option network 'lan wan6'
 
 config zone
 	option name 'wan'
+	list network 'wan'
+	list network 'wan6'
 	option input 'REJECT'
 	option output 'ACCEPT'
 	option forward 'REJECT'
 	option masq '1'
 	option mtu_fix '1'
-	option network 'wan'
+
+config forwarding
+	option src 'lan'
+	option dest 'wan'
 
 config rule
 	option name 'Allow-DHCP-Renew'
@@ -126,18 +131,10 @@ config rule
 	option proto 'udp'
 	option family 'ipv4'
 	option target 'REJECT'
-	option enabled 'false'
+	option enabled '0'
 
 config include
 	option path '/etc/firewall.user'
-
-config rule
-	option name 'drop-wan-ssh'
-	option src 'wan'
-	option dest 'wan'
-	option dest_port '22'
-	option proto 'tcp'
-	option target 'DROP'
 
 config include 'zerotier'
 	option type 'script'
@@ -149,100 +146,6 @@ config include 'miniupnpd'
 	option path '/usr/share/miniupnpd/firewall.include'
 	option family 'any'
 	option reload '1'
-
-config include 'adbyby'
-	option type 'script'
-	option path '/var/etc/adbyby.include'
-	option reload '1'
-
-config rule 'adblock'
-	option name 'adblock'
-	option target 'DROP'
-	option src 'wan'
-	option proto 'tcp'
-	option dest_port '8118'
-
-config include 'socat'
-	option type 'script'
-	option path '/var/etc/socat.include'
-	option reload '1'
-
-config include 'ssr_mudb_server'
-	option type 'script'
-	option path '/var/etc/ssr_mudb_server.include'
-	option reload '1'
-
-config include 'ipsecd'
-	option type 'script'
-	option path '/etc/ipsec.include'
-	option reload '1'
-
-config rule 'ike'
-	option name 'ike'
-	option target 'ACCEPT'
-	option src 'wan'
-	option proto 'udp'
-	option dest_port '500'
-
-config rule 'ipsec'
-	option name 'ipsec'
-	option target 'ACCEPT'
-	option src 'wan'
-	option proto 'udp'
-	option dest_port '4500'
-
-config rule 'ah'
-	option name 'ah'
-	option target 'ACCEPT'
-	option src 'wan'
-	option proto 'ah'
-
-config rule 'esp'
-	option name 'esp'
-	option target 'ACCEPT'
-	option src 'wan'
-	option proto 'esp'
-
-config zone 'VPN'
-	option name 'VPN'
-	option input 'ACCEPT'
-	option forward 'ACCEPT'
-	option output 'ACCEPT'
-	option network 'VPN'
-
-config include 'koolproxy'
-	option type 'script'
-	option path '/var/etc/koolproxy.include'
-	option reload '1'
-
-config include 'mia'
-	option type 'script'
-	option path '/etc/mia.include'
-	option reload '1'
-
-config include 'openclash'
-	option type 'script'
-	option path '/var/etc/openclash.include'
-	option reload '1'
-
-config rule 'openvpn'
-	option name 'openvpn'
-	option target 'ACCEPT'
-	option src 'wan'
-	option proto 'tcp udp'
-	option dest_port '1194'
-
-config zone 'vpn'
-	option name 'vpn'
-	option input 'ACCEPT'
-	option forward 'ACCEPT'
-	option output 'ACCEPT'
-	option masq '1'
-	option network 'vpn0'
-
-config forwarding 'vpntowan'
-	option src 'vpn'
-	option dest 'wan'
 
 config include 'passwall'
 	option type 'script'
@@ -264,54 +167,14 @@ config include 'passwall2_server'
 	option path '/var/etc/passwall2_server.include'
 	option reload '1'
 
-config include 'pptpd'
-	option type 'script'
-	option path '/etc/pptpd.include'
-	option reload '1'
-
-config rule 'pptp'
-	option name 'pptp'
-	option target 'ACCEPT'
-	option src 'wan'
-	option proto 'tcp'
-	option dest_port '1723'
-
-config rule 'gre'
-	option name 'gre'
-	option target 'ACCEPT'
-	option src 'wan'
-	option proto '47'
-
-config include 'softethervpn'
-	option type 'script'
-	option path '/usr/share/softethervpn/firewall.include'
-	option reload '1'
-
 config include 'shadowsocksr'
 	option type 'script'
 	option path '/var/etc/shadowsocksr.include'
 	option reload '1'
 
-config rule 'ssrs'
-	option name 'ssrs'
-	option target 'ACCEPT'
-	option src 'wan'
-	option proto 'tcp'
-	option dest_port '10240'
-
-config include 'udp2raw'
+config include 'unblockneteasemusic'
 	option type 'script'
-	option path '/var/etc/udp2raw.include'
-	option reload '1'
-
-config include 'unblockmusic'
-	option type 'script'
-	option path '/var/etc/unblockmusic.include'
-	option reload '1'
-
-config include 'v2ray_server'
-	option type 'script'
-	option path '/var/etc/v2ray_server.include'
+	option path '/var/run/unblockneteasemusic/fw3.include'
 	option reload '1'
 
 config rule 'kms'
@@ -322,62 +185,27 @@ config rule 'kms'
 	option dest_port '1688'
 
 config rule
+	option target 'ACCEPT'
+	option proto 'tcp udp'
+	option dest_port '1099'
+	option name 'TG'
+	option src '*'
+	option src_port '1099'
+
+config rule
+	option target 'ACCEPT'
+	option proto 'tcp udp'
+	option dest_port '1088'
+	option name 'www'
+	option src '*'
+	option src_port '1088'
+
+config rule
 	option enabled '1'
 	option target 'ACCEPT'
 	option proto 'tcp udp'
-	option name 'TG'
-	option dest_port '1099'
-	option src 'wan'
-
-config include 'wrtbwmon'
-	option type 'script'
-	option path '/etc/wrtbwmon.include'
-	option reload '1'
-
-config zone
-	option name 'LAN6'
-	option input 'ACCEPT'
-	option forward 'ACCEPT'
-	option output 'ACCEPT'
-	option network 'LAN6'
-
-config zone 'docker'
-	option input 'ACCEPT'
-	option output 'ACCEPT'
-	option forward 'ACCEPT'
-	option name 'docker'
-	list network 'docker docker'
-	list network 'docker'
-
-config forwarding
-	option dest 'wan'
-	option src 'LAN6'
-
-config forwarding
-	option dest 'LAN6'
-	option src 'wan'
-
-config forwarding
-	option dest 'lan'
-	option src 'LAN6'
-
-config forwarding
-	option dest 'lan'
-	option src 'vpn'
-
-config forwarding
-	option dest 'lan'
-	option src 'wan'
-
-config forwarding
-	option dest 'LAN6'
-	option src 'lan'
-
-config forwarding
-	option dest 'vpn'
-	option src 'lan'
-
-config forwarding
-	option dest 'wan'
-	option src 'lan'
+	option dest_port '1092'
+	option name 'onecloud'
+	option src '*'
+	option src_port '1092'
 
