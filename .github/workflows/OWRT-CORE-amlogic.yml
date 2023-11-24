@@ -156,7 +156,7 @@ jobs:
       - name: 加载自定义订阅源
         run: |
           cd openwrt
-          #echo 'src-git mo_zerotier https://github.com/mwarning/zerotier-openwrt.git' >>feeds.conf.default
+          echo 'src-git mo_zerotier https://github.com/mwarning/zerotier-openwrt.git' >>feeds.conf.default
           echo 'src-git mo_small https://github.com/kenzok8/small-package' >>feeds.conf.default
           echo "COMMIT_HASH=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
