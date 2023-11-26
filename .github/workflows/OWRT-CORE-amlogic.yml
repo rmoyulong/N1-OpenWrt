@@ -182,6 +182,8 @@ jobs:
           echo 'src-git mo_small https://github.com/kenzok8/small-package' >>feeds.conf.default
           ./scripts/feeds update -a
           ./scripts/feeds install -a
+          
+          ##删除冲突插件
           rm -rf $(find ./feeds/mo_small/ -type d -regex ".*\(luci-app-amlogic\).*")
           rm -rf feeds/mo_small/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
           svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
