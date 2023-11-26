@@ -156,7 +156,11 @@ jobs:
           
           ./scripts/feeds update -a
           ./scripts/feeds install -a
-          #rm -rf $(find ./feeds/ -type d -regex ".*\(base-files).*")
+          
+          ##删除冲突插件
+          rm -rf $(find ./feeds/luci/ -type d -regex ".*\(argon\|design\|openclash\).*")
+          rm -rf $(find ./feeds/luci/ -type d -regex ".*\(luci-app-passwall\|luci-app-passwall2\|luci-app-ssr-plus\).*")
+          rm -rf $(find ./feeds/packages/ -type d -regex ".*\(v2ray-geodata\|haproxy\).*")          
 
       - name: 启动缓存[第二次起生效]
         uses: rmoyulong/cachewrtbuild@main
@@ -174,12 +178,13 @@ jobs:
           chmod +x ./scripts/*
           chmod +x ./scripts/feeds
           chmod +x ./config/*.*
-          
+                    
           echo 'src-git mo_small https://github.com/kenzok8/small-package' >>feeds.conf.default
           ./scripts/feeds update -a
           ./scripts/feeds install -a
-          
-          rm -rf $(find ./feeds/mo_small/ -type d -regex ".*\(base-files).*")
+          rm -rf $(find ./feeds/mo_small/ -type d -regex ".*\(luci-app-amlogic\).*")
+          rm -rf feeds/mo_small/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
+          svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
 
       - name: 自定义脚本
         run: |
@@ -194,7 +199,7 @@ jobs:
 
       - name: 自定义设置
         run: |
-          cp -rf $GITHUB_WORKSPACE/$OWRT_FILES openwrt/files
+          #cp -rf $GITHUB_WORKSPACE/$OWRT_FILES openwrt/files
           cd openwrt
 
           rm -rf ./tmp* ./.config*
