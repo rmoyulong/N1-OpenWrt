@@ -155,9 +155,8 @@ jobs:
           echo "COMMIT_HASH=$(git rev-parse HEAD)" >> $GITHUB_ENV
           
           ./scripts/feeds update -a
-          ./scripts/feeds install -a          
-          
-          rm -rf $(find ./feeds/ -type d -regex ".*\(base-files).*")
+          ./scripts/feeds install -a
+          #rm -rf $(find ./feeds/ -type d -regex ".*\(base-files).*")
 
       - name: 启动缓存[第二次起生效]
         uses: rmoyulong/cachewrtbuild@main
@@ -179,6 +178,8 @@ jobs:
           echo 'src-git mo_small https://github.com/kenzok8/small-package' >>feeds.conf.default
           ./scripts/feeds update -a
           ./scripts/feeds install -a
+          
+          rm -rf $(find ./feeds/mo_small/ -type d -regex ".*\(base-files).*")
 
       - name: 自定义脚本
         run: |
