@@ -19,8 +19,8 @@ env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: master
   CONFIG_FILE: armsr.config
-  DIY_P1_SH: sh/lean1.sh
-  DIY_P2_SH: sh/Settings.sh
+  DIY_P1_SH: Scripts/lean1.sh
+  DIY_P2_SH: Scripts/Settings.sh
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
   OWRT_IP: 192.168.1.110
@@ -76,7 +76,7 @@ jobs:
         
     - name: 检查脚本
       run: |
-        cd ./sh
+        cd ./Scripts
 
         dos2unix ./*.sh
         chmod +x ./*.sh        
@@ -104,7 +104,7 @@ jobs:
          rm -rf ./tmp* ./.config*
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         cp -rf $GITHUB_WORKSPACE/ax6/banner package/base-files/files/etc/banner
-        cp -f ../sh/Settings.sh ./        
+        cp -f ../Scripts/Settings.sh ./        
         chmod +x ./Settings.sh && ./Settings.sh
                
     - name: 自定义IMAGS格式 - ARMv8
