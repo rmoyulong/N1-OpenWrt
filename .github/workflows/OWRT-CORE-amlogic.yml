@@ -157,12 +157,9 @@ jobs:
       - name: 加载自定义订阅源
         run: |
           cd openwrt
-          cp -rf ../${{ env.DIY_P1_SH }} s1.sh
-          chmod +x ./*.sh
-          ./s1.sh
-          $GITHUB_WORKSPACE/${{ env.DIY_P1_SH }}
-          echo "COMMIT_HASH=$(git rev-parse HEAD)" >> $GITHUB_ENV
           
+          echo "COMMIT_HASH=$(git rev-parse HEAD)" >> $GITHUB_ENV
+          $GITHUB_WORKSPACE/${{ env.DIY_P1_SH }}
 
       - name: 启动缓存[第二次起生效]
         uses: rmoyulong/cachewrtbuild@main
@@ -179,16 +176,14 @@ jobs:
           
           rm -rf ./tmp* ./.config*
           [ -e $GITHUB_WORKSPACE/$CONFIG_FILE ] && mv $GITHUB_WORKSPACE/$CONFIG_FILE .config
-          cp -rf ../ax6/banner  package/base-files/files/etc/banner
-          cp -rf ../${{ env.DIY_P2_SH }} s2.sh
-          chmod +x ./*.sh
-          ./s2.sh
 
       - name: 自定义设置
         run: |
           cp -rf $GITHUB_WORKSPACE/$OWRT_FILES openwrt/files
-
-          cd openwrt && make defconfig
+          cp -rf $GITHUB_WORKSPACE/ax6/banner  openwrt/package/base-files/files/etc/banner
+          cd openwrt
+          $GITHUB_WORKSPACE/${{ env.DIY_P2_SH }} 
+          make defconfig
 
       - name: 下载编译依赖
         working-directory: ./openwrt
