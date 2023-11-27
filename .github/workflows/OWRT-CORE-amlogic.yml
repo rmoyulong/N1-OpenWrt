@@ -52,6 +52,8 @@ env:
   OWRT_TYPE: ${{inputs.OWRT_TYPE}}
   OWRT_LINUX: ${{inputs.OWRT_LINUX}}
   OWRT_FILES: ${{inputs.OWRT_FILES}}
+  DIY_P1_SH: Scripts/Plugins.sh
+  DIY_P2_SH: Scripts/Settings.sh
   TZ: Asia/Shanghai
   #USE_CACHEWRTBUILD: true
   
@@ -65,20 +67,16 @@ jobs:
       - name: 检查分配的服务器性能
         run: |
           echo "警告⚠"
-          echo "若分配的服务器性能不足，务必及时取消，重新运行！"
-          echo "已知编译成功CPU型号：8370C,8171M,7763"
-          echo "已知性能不足CPU型号：8272CL"
-          echo -e "-------------- ------------CPU信息------------------------------------------\n"
-          echo "CPU物理数量:$(cat /proc/cpuinfo| grep "physical id"| sort| uniq| wc -l)"
-          echo -e "CPU核心及版本信息：$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
-          echo "-------------------------------内存信息-------------------------------------------"
+          echo "分配的服务器性能有限，若选择的插件过多，务必注意CPU性能！"
+          echo -e "已知CPU型号（降序）：7763，8370C，8272CL，8171M，E5-2673 \n"
+          echo "--------------------------CPU信息--------------------------"
+          echo "CPU物理数量：$(cat /proc/cpuinfo | grep "physical id" | sort | uniq | wc -l)"
+          echo -e "CPU核心信息：$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
+          echo "--------------------------内存信息--------------------------"
           echo "已安装内存详细信息："
-          sudo lshw -short -C memory | grep GiB
-          echo -e "\n"
-          echo "-----------------------------硬盘信息---------------------------------------------"
-          echo -e  "硬盘数量：$(ls /dev/sd* | grep -v [1-9] | wc -l) \n"
-          echo "硬盘详情："
-          df -Th       
+          echo -e "$(sudo lshw -short -C memory | grep GiB) \n"
+          echo "--------------------------硬盘信息--------------------------"
+          echo "硬盘数量：$(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT        
           
       - name: 初始化编译环境
         env:
@@ -151,16 +149,9 @@ jobs:
       - name: 加载自定义订阅源
         run: |
           cd openwrt
-          echo 'src-git mo_zerotier https://github.com/mwarning/zerotier-openwrt.git' >>feeds.conf.default
+          $GITHUB_WORKSPACE/$DIY_P1_SH
           echo "COMMIT_HASH=$(git rev-parse HEAD)" >> $GITHUB_ENV
           
-          ./scripts/feeds update -a
-          ./scripts/feeds install -a
-          
-          ##删除冲突插件
-          rm -rf $(find ./feeds/luci/ -type d -regex ".*\(argon\|design\|openclash\).*")
-          rm -rf $(find ./feeds/luci/ -type d -regex ".*\(luci-app-passwall\|luci-app-passwall2\|luci-app-ssr-plus\).*")
-          rm -rf $(find ./feeds/packages/ -type d -regex ".*\(v2ray-geodata\|haproxy\).*")          
 
       - name: 启动缓存[第二次起生效]
         uses: rmoyulong/cachewrtbuild@main
@@ -172,43 +163,18 @@ jobs:
       - name: 更新订阅源
         run: |
           cd openwrt
-          dos2unix ./scripts/*.sh
-          chmod +x ./scripts/*.sh
-          chmod +x ./scripts/*.*
-          chmod +x ./scripts/*
-          chmod +x ./scripts/feeds
-          chmod +x ./config/*.*
-                    
-          echo 'src-git mo_small https://github.com/kenzok8/small-package' >>feeds.conf.default
           ./scripts/feeds update -a
           ./scripts/feeds install -a
           
-          ##删除冲突插件
-          rm -rf $(find ./feeds/mo_small/ -type d -regex ".*\(luci-app-amlogic\).*")
-          rm -rf feeds/mo_small/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
-          svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
-
-      - name: 自定义脚本
-        run: |
-          cd openwrt
-
+          rm -rf ./tmp* ./.config*
+          [ -e $GITHUB_WORKSPACE/$CONFIG_FILE ] && mv $GITHUB_WORKSPACE/$CONFIG_FILE .config
           cp -rf $GITHUB_WORKSPACE/ax6/banner package/base-files/files/etc/banner
-          $GITHUB_WORKSPACE/Scripts/Settings.sh
-
-          cd ./package
-
-          $GITHUB_WORKSPACE/Scripts/Plugins.sh
+          $GITHUB_WORKSPACE/$DIY_P2_SH
 
       - name: 自定义设置
         run: |
-          #cp -rf $GITHUB_WORKSPACE/$OWRT_FILES openwrt/files
-          cd openwrt
-
-          rm -rf ./tmp* ./.config*
-          #rm -rf $(find ./ -type f -iname "*.config*")*          
-          #make dirclean
-          [ -e $GITHUB_WORKSPACE/Config/$OWRT_CFG ] && mv $GITHUB_WORKSPACE/Config/$OWRT_CFG .config
-          make defconfig
+          cp -rf $GITHUB_WORKSPACE/$OWRT_FILES openwrt/files
+          cd openwrt && make defconfig
 
       - name: 下载编译依赖
         working-directory: ./openwrt
