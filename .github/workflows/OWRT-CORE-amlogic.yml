@@ -38,6 +38,12 @@ on:
       OWRT_FILES:
         required: true
         type: string
+      DIY_P1_SH:
+        required: true
+        type: string
+      DIY_P2_SH:
+        required: true
+        type: string
         
 env:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -52,8 +58,8 @@ env:
   OWRT_TYPE: ${{inputs.OWRT_TYPE}}
   OWRT_LINUX: ${{inputs.OWRT_LINUX}}
   OWRT_FILES: ${{inputs.OWRT_FILES}}
-  DIY_P1_SH: Scripts/Plugins.sh
-  DIY_P2_SH: Scripts/Settings.sh
+  DIY_P1_SH: ${{inputs.DIY_P1_SH}}
+  DIY_P2_SH: ${{inputs.DIY_P2_SH}}
   TZ: Asia/Shanghai
   #USE_CACHEWRTBUILD: true
   
@@ -110,6 +116,8 @@ jobs:
           echo "OWRT_IP=$OWRT_IP" >> $GITHUB_ENV
           echo "OWRT_LINUX=$OWRT_LINUX" >> $GITHUB_ENV
           echo "OWRT_FILES=$OWRT_FILES" >> $GITHUB_ENV
+          echo "DIY_P1_SH=$DIY_P1_SH" >> $GITHUB_ENV
+          echo "DIY_P2_SH=$DIY_P2_SH" >> $GITHUB_ENV
 
       - name: 检查脚本
         run: |
@@ -149,7 +157,10 @@ jobs:
       - name: 加载自定义订阅源
         run: |
           cd openwrt
-          $GITHUB_WORKSPACE/$DIY_P1_SH
+          cp -rf ../${{ env.DIY_P1_SH }} s1.sh
+          chmod +x ./*.sh
+          ./s1.sh
+          $GITHUB_WORKSPACE/${{ env.DIY_P1_SH }}
           echo "COMMIT_HASH=$(git rev-parse HEAD)" >> $GITHUB_ENV
           
 
@@ -168,12 +179,14 @@ jobs:
           
           rm -rf ./tmp* ./.config*
           [ -e $GITHUB_WORKSPACE/$CONFIG_FILE ] && mv $GITHUB_WORKSPACE/$CONFIG_FILE .config
+          cp -rf ../ax6/banner  package/base-files/files/etc/banner
+          cp -rf ../${{ env.DIY_P2_SH }} s2.sh
+          chmod +x ./*.sh
+          ./s2.sh
 
       - name: 自定义设置
         run: |
           cp -rf $GITHUB_WORKSPACE/$OWRT_FILES openwrt/files
-          cp -rf $GITHUB_WORKSPACE/ax6/banner  openwrt/package/base-files/files/etc/banner
-          $GITHUB_WORKSPACE/$DIY_P2_SH
 
           cd openwrt && make defconfig
 
