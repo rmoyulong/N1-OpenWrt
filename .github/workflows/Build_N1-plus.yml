@@ -1,4 +1,4 @@
-name: N1 Images Plus
+name: N1 Plus Images
 
 on: 
   repository_dispatch:
@@ -16,7 +16,7 @@ on:
 permissions: write-all 
 
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_URL: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: master
   CONFIG_FILE: Config/armsr.config
   DIY_P1_SH: Scripts/custom.sh
@@ -100,7 +100,7 @@ jobs:
         ./scripts/feeds install -a  
         
         ##删除冲突插件
-        #rm -rf feeds/mo_small/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}  
+        rm -rf feeds/mo_small/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}  
         
          rm -rf ./tmp* ./.config*
         [ -e $GITHUB_WORKSPACE/$CONFIG_FILE ] && mv $GITHUB_WORKSPACE/$CONFIG_FILE .config
