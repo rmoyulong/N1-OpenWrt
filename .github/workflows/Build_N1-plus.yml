@@ -139,16 +139,20 @@ jobs:
         md5=`echo ${md5:0:10}`
         }
         
-        rom=openwrt/bin/targets/*/*/openwrt-*.img.gz
+        rom=openwrt/bin/targets/*/*/*.tar.gz
         getmd5 $rom
+        
+        rom1=openwrt/bin/targets/*/*/*.img.gz
+        getmd5 $rom1
                 
-        cp -a $rom ./ARM_Out/openwrt-$(date +%Y%m%d)_${md5}.img.gz
+        cp -a $rom ./ARM_Out/openwrt-$(date +%Y%m%d)_${md5}.tar.gz
+        cp -a $rom1 ./ARM_Out/openwrt-$(date +%Y%m%d)_${md5}.img.gz
                
     - name: 上传固件
       uses: actions/upload-artifact@main
       with:
         name: armv8
-        path: ARM_Out/*.img.gz 
+        path: ARM_Out/*
 
     - name: 上传配置文件
       uses: actions/upload-artifact@main
