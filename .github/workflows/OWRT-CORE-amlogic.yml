@@ -168,12 +168,12 @@ jobs:
           
           rm -rf ./tmp* ./.config*
           [ -e $GITHUB_WORKSPACE/$CONFIG_FILE ] && mv $GITHUB_WORKSPACE/$CONFIG_FILE .config
-          cp -rf $GITHUB_WORKSPACE/ax6/banner  package/base-files/files/etc/banner
-          $GITHUB_WORKSPACE/$DIY_P2_SH
 
       - name: 自定义设置
         run: |
           cp -rf $GITHUB_WORKSPACE/$OWRT_FILES openwrt/files
+          cp -rf $GITHUB_WORKSPACE/ax6/banner  openwrt/package/base-files/files/etc/banner
+          $GITHUB_WORKSPACE/$DIY_P2_SH
 
           cd openwrt && make defconfig
 
