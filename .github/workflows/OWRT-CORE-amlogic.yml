@@ -159,7 +159,7 @@ jobs:
           cd openwrt
           
           echo "COMMIT_HASH=$(git rev-parse HEAD)" >> $GITHUB_ENV
-          $GITHUB_WORKSPACE/${{ env.DIY_P1_SH }}
+          $GITHUB_WORKSPACE/Scripts/$DIY_P1_SH
 
       - name: 启动缓存[第二次起生效]
         uses: rmoyulong/cachewrtbuild@main
@@ -182,7 +182,7 @@ jobs:
           cp -rf $GITHUB_WORKSPACE/$OWRT_FILES openwrt/files
           cp -rf $GITHUB_WORKSPACE/ax6/banner  openwrt/package/base-files/files/etc/banner
           cd openwrt
-          $GITHUB_WORKSPACE/${{ env.DIY_P2_SH }} 
+          $GITHUB_WORKSPACE/Scripts/$DIY_P2_SH
           make defconfig
 
       - name: 下载编译依赖
