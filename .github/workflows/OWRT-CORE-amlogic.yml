@@ -174,9 +174,6 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a
           
-          rm -rf ./tmp* ./.config*
-          [ -e $GITHUB_WORKSPACE/Config/$OWRT_CFG ] && mv $GITHUB_WORKSPACE/Config/$OWRT_CFG .config
-
       - name: 自定义设置
         run: |
           cp -rf $GITHUB_WORKSPACE/$OWRT_FILES openwrt/files
@@ -188,11 +185,13 @@ jobs:
           cd ./package
           $GITHUB_WORKSPACE/Scripts/custom.sh
           
-          make defconfig
-
       - name: 下载编译依赖
         working-directory: ./openwrt
         run: |
+          rm -rf ./tmp* ./.config*
+          [ -e $GITHUB_WORKSPACE/Config/$OWRT_CFG ] && mv $GITHUB_WORKSPACE/Config/$OWRT_CFG .config
+          
+          make defconfig
           make download -j$(nproc)
           #make download -j8
           #make -j16 download
