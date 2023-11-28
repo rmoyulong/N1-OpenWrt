@@ -1,5 +1,5 @@
 #CI项目名
-name: amlogic-zyxq
+name: amlogic-打包章鱼星球
 
 on:
   #自动编译：每天早上4点
