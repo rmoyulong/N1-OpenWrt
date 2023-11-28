@@ -87,7 +87,7 @@ git clone --depth=1 https://github.com/jerrykuku/lua-maxminddb package/lua-maxmi
 git clone --depth=1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall
 svn export https://github.com/kenzok8/small-package/trunk/luci-app-passwall package/luci-app-passwall
 svn export https://github.com/xiaorouji/openwrt-passwall2/trunk/luci-app-passwall2 package/luci-app-passwall2
-svn export https://github.com/vernesong/OpenClash/trunk/luci-app-openclash package/luci-app-openclash
+#svn export https://github.com/vernesong/OpenClash/trunk/luci-app-openclash package/luci-app-openclash
 svn export https://github.com/kenzok8/small-package/trunk/luci-app-ssr-plus package/luci-app-ssr-plus
 
 # 科学上网插件依赖
