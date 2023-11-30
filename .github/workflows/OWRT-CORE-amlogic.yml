@@ -176,7 +176,6 @@ jobs:
           
       - name: 自定义设置
         run: |
-          cp -rf $GITHUB_WORKSPACE/$OWRT_FILES/ openwrt/files
           cp -rf $GITHUB_WORKSPACE/ax6/banner  openwrt/package/base-files/files/etc/banner
           cd openwrt
           $GITHUB_WORKSPACE/Scripts/$DIY_P2_SH
@@ -190,6 +189,7 @@ jobs:
         run: |
           rm -rf ./tmp* ./.config*
           [ -e $GITHUB_WORKSPACE/Config/$OWRT_CFG ] && mv $GITHUB_WORKSPACE/Config/$OWRT_CFG .config
+          cp -rf $GITHUB_WORKSPACE/$OWRT_FILES/* ./files
           
           make defconfig
           make download -j$(nproc)
