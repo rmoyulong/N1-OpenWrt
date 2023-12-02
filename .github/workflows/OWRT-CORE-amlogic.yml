@@ -173,6 +173,12 @@ jobs:
           ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
           [ -e $GITHUB_WORKSPACE/Config/$OWRT_CFG ] && echo "DEVICE_NAME=$(grep '^CONFIG_TARGET_.*_.*_DEVICE_.*=y' $GITHUB_WORKSPACE/Config/$OWRT_CFG | sed -r 's/.*DEVICE_(.*)=y/\1/')" >> $GITHUB_ENV
 
+          # Set output information
+          echo "build_tag=OpenWrt_${OWRT_TARGET}_${{ env.OWRT_STORAGE }}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
+          echo -e "REPO_URL: [ ${REPO_URL} ]\nREPO_BRANCH: [ ${REPO_BRANCH} ]\nTAGS_NAME: [ ${OWRT_NAME} ]"
+          df -hT ${PWD}
+          echo "status=success" >> ${GITHUB_OUTPUT}  
+          
       - name: 加载自定义订阅源
         run: |
           cd openwrt
