@@ -44,6 +44,21 @@ on:
       DIY_P2_SH:
         required: true
         type: string
+      OWRT_STORAGE:
+        required: true
+        type: string 
+      kernel_repo:
+        required: true
+        type: string
+      kernel_usage:
+        required: true
+        type: string
+      builder_name:
+        required: true
+        type: string
+      auto_kernel:
+        required: true
+        type: string   
         
 env:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -58,8 +73,13 @@ env:
   OWRT_TYPE: ${{inputs.OWRT_TYPE}}
   OWRT_LINUX: ${{inputs.OWRT_LINUX}}
   OWRT_FILES: ${{inputs.OWRT_FILES}}
+  OWRT_STORAGE: ${{inputs.OWRT_STORAGE}}
   DIY_P1_SH: ${{inputs.DIY_P1_SH}}
   DIY_P2_SH: ${{inputs.DIY_P2_SH}}
+  kernel_repo: ${{inputs.kernel_repo}}
+  kernel_usage: ${{inputs.kernel_usage}}
+  builder_name: ${{inputs.builder_name}}
+  auto_kernel: ${{inputs.auto_kernel}}
   TZ: Asia/Shanghai
   #USE_CACHEWRTBUILD: true
   
@@ -116,8 +136,7 @@ jobs:
           echo "OWRT_IP=$OWRT_IP" >> $GITHUB_ENV
           echo "OWRT_LINUX=$OWRT_LINUX" >> $GITHUB_ENV
           echo "OWRT_FILES=$OWRT_FILES" >> $GITHUB_ENV
-          echo "DIY_P1_SH=$DIY_P1_SH" >> $GITHUB_ENV
-          echo "DIY_P2_SH=$DIY_P2_SH" >> $GITHUB_ENV
+          echo "OWRT_STORAGE=$OWRT_STORAGE" >> $GITHUB_ENV
 
       - name: 检查脚本
         run: |
@@ -206,17 +225,48 @@ jobs:
           echo "status=success" >> $GITHUB_OUTPUT
           echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV  
 
-      - name: 整理固件
-        if: ${{ env.compile_status }} == 'success' && !cancelled()
-        uses: unifreq/openwrt_packit@master
-        env:
-          OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*.tar.gz
-          KERNEL_VERSION_NAME: ${{ env.OWRT_LINUX }}
-          PACKAGE_SOC: ${{ env.OWRT_TARGET }}
-          GZIP_IMGS: .xz
-          SW_FLOWOFFLOAD: 0
-          SFE_FLOW: 0
-          ENABLE_WIFI_K510: 0
+      #- name: 整理固件
+        #if: ${{ env.compile_status }} == 'success' && !cancelled()
+        #uses: unifreq/openwrt_packit@master
+        #env:
+          #OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*.tar.gz
+          #KERNEL_VERSION_NAME: ${{ env.OWRT_LINUX }}
+          #PACKAGE_SOC: ${{ env.OWRT_TARGET }}
+          #GZIP_IMGS: .xz
+          #SW_FLOWOFFLOAD: 0
+          #SFE_FLOW: 0
+          #ENABLE_WIFI_K510: 0
+ 
+      - name: 清理服务器空间
+        id: clean
+        if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
+        run: |
+          # Clean up server space
+          cd openwrt/
+          mkdir output
+          cp -f bin/targets/*/*/*rootfs.tar.gz output/
+          cp -f .config output/config
+          rm -rf $(ls . | grep -v "^output$" | xargs) 2>/dev/null
+          
+          # Generate sha256sum file
+          cd output/
+          for file in *; do [[ ! -d "${file}" ]] && sha256sum "${file}" >"${file}.sha"; done
+
+          # Set output information
+          df -hT ${PWD}
+          echo "status=success" >> ${GITHUB_OUTPUT}
+          
+      - name: 打包OpenWrt
+        if: ${{ steps.clean.outputs.status }} == 'success' && !cancelled()
+        uses: ophub/amlogic-s9xxx-openwrt@main
+        with:
+          openwrt_path: openwrt/output/*rootfs.tar.gz
+          openwrt_board: ${{ env.OWRT_TARGET }}
+          openwrt_kernel: ${{ env.OWRT_LINUX }}
+          auto_kernel: ${{ inputs.auto_kernel }}
+          kernel_repo: ${{ inputs.kernel_repo }}
+          kernel_usage: ${{ inputs.kernel_usage }}
+          builder_name: ${{ inputs.builder_name }}          
 
       - name: 上传固件
         uses: rmoyulong/action-gh-release@master

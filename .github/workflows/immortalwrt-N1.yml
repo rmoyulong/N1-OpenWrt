@@ -39,3 +39,10 @@ jobs:
       OWRT_FILES: N1/files
       DIY_P1_SH: Plugins.sh
       DIY_P2_SH: Settings.sh
+      #save/temp
+      OWRT_STORAGE: save
+      kernel_repo: ophub/kernel
+      #stable/flippy/dev/beta
+      kernel_usage: stable
+      builder_name: ophub
+      auto_kernel: true
