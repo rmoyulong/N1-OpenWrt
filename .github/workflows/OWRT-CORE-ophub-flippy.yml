@@ -274,7 +274,7 @@ jobs:
           #kernel_usage: ${{ inputs.kernel_usage }}
           #builder_name: ${{ inputs.builder_name }}          
 
-      - name: Package Armvirt as OpenWrt
+      - name: 打包OpenWrt
         if: (!cancelled())
         uses: ophub/flippy-openwrt-actions@main
         env:
