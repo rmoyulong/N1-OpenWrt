@@ -37,7 +37,7 @@ jobs:
       OWRT_TYPE: 斐讯N1
       OWRT_LINUX: 6.1.62_5.15.140
       OWRT_FILES: N1/files
-      DIY_P1_SH: Plugins.sh
+      DIY_P1_SH: Plugins_armsr.sh
       DIY_P2_SH: Settings.sh
       #save/temp
       OWRT_STORAGE: save
