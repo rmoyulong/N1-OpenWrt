@@ -35,6 +35,7 @@ svn export https://github.com/Lienol/openwrt-package/trunk/luci-app-filebrowser 
 svn export https://github.com/NueXini/NueXini_Packages/trunk/luci-app-vlmcsd package/luci-app-vlmcsd
 svn export https://github.com/NueXini/NueXini_Packages/trunk/luci-app-qbittorrent package/luci-app-qbittorrent
 svn export https://github.com/kenzok8/small-package/trunk/luci-app-unblockneteasemusic package/luci-app-unblockneteasemusic
+svn export https://github.com/kiddin9/openwrt-packages/trunk/luci-app-zerotier package/luci-app-zerotier
 
 # 科学上网插件
 git clone --depth=1 https://github.com/fw876/helloworld.git package/helloworld
