@@ -209,7 +209,7 @@ jobs:
           
           cd openwrt/
           mkdir -p output
-          curl -L -o output/openwrt-armvirt-64-generic-rootfs.tar.gz ${{ env.OWRT_PATH }}
+          curl -L -o output/openwrt-armvirt-64-generic-rootfs.tar.gz $OWRT_PATH
         
           # Generate sha256sum file
           cd output/
