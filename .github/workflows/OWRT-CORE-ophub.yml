@@ -204,12 +204,11 @@ jobs:
         run: |
           # Clean up server space
           
-          #获得rootfs.tar.gz的路径
-          $GITHUB_WORKSPACE/Scripts/$DIY_P1_SH
-          
           cd openwrt/
           mkdir -p output
-          curl -L -o output/openwrt-armvirt-64-generic-rootfs.tar.gz ${OWRT_PATH}
+          
+          #获得rootfs.tar.gz的路径并下载
+          $GITHUB_WORKSPACE/Scripts/$DIY_P1_SH
         
           # Generate sha256sum file
           cd output/
