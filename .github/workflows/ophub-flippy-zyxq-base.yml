@@ -1,5 +1,5 @@
 #CI项目名
-name: 章鱼星球编译底包-[immortalwrt/flippy]
+name: 章鱼星球编译底包-[lede/flippy]
 
 on:
   #自动编译：每天早上4点
@@ -28,7 +28,7 @@ jobs:
       #默认地址
       OWRT_IP: 192.168.1.100
       #默认源码
-      OWRT_URL: https://github.com/immortalwrt/immortalwrt
+      OWRT_URL: https://github.com/coolsnowwolf/lede
       #源码版本
       OWRT_BRANCH: master
       #自定义config
